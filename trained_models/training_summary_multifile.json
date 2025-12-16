@@ -1,0 +1,33 @@
+{
+  "training_date": "2025-12-16 13:43:06",
+  "model_name": "indobenchmark/indobert-base-p2",
+  "files_used": [
+    "dataset_cnn_10k_cleaned.xlsx",
+    "dataset_kompas_4k_cleaned.xlsx",
+    "dataset_tempo_6k_cleaned.xlsx",
+    "dataset_turnbackhoax_10_cleaned.xlsx"
+  ],
+  "text_column": "text_new",
+  "label_column": "hoax",
+  "data_stats": {
+    "total_samples": 20014,
+    "hoax_samples": 6489,
+    "valid_samples": 13525,
+    "avg_text_length": 186.01433996202658,
+    "num_files": 4,
+    "files": [
+      "dataset_cnn_10k_cleaned.xlsx",
+      "dataset_kompas_4k_cleaned.xlsx",
+      "dataset_tempo_6k_cleaned.xlsx",
+      "dataset_turnbackhoax_10_cleaned.xlsx"
+    ]
+  },
+  "combined_dataset": "trained_models\\combined_dataset.csv",
+  "training_config": {
+    "epochs": 3,
+    "batch_size": 8,
+    "learning_rate": 2e-05
+  },
+  "test_accuracy": 0.9945054945054945,
+  "best_val_accuracy": 0.9960019990004998
+}
