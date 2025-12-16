@@ -1,0 +1,100 @@
+{% extends 'detection_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-search me-2"></i> Deteksi Berita Hoax</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Masukkan teks berita yang ingin Anda periksa. Sistem akan menganalisis menggunakan model IndoBERT.
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.news_text.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-newspaper me-1"></i> Teks Berita
+                        </label>
+                        {{ form.news_text }}
+                        <div class="form-text">
+                            Maksimal 5000 karakter. Gunakan bahasa Indonesia untuk hasil terbaik.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.source_url.id_for_label }}" class="form-label fw-bold">
+                            <i class="fas fa-link me-1"></i> URL Sumber (Opsional)
+                        </label>
+                        {{ form.source_url }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check">
+                            {{ form.check_patterns }}
+                            <label class="form-check-label" for="{{ form.check_patterns.id_for_label }}">
+                                Cek pola hoax umum (keyword, frasa, dll)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="reset" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-redo me-1"></i> Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-play-circle me-1"></i> Analisis Berita
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-lightbulb me-2"></i> Tips:</h5>
+                    <ul class="mb-0">
+                        <li>Salin teks berita lengkap untuk hasil yang akurat</li>
+                        <li>Pastikan teks dalam bahasa Indonesia</li>
+                        <li>Untuk berita dari website, gunakan fitur <a href="{% url 'detect_url' %}">Deteksi dari URL</a></li>
+                        <li>Hasil deteksi akan disimpan di history jika Anda login</li>
+                    </ul>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="fas fa-exclamation-triangle text-danger me-2"></i>Ciri-ciri Hoax:</h6>
+                                <ul class="small mb-0">
+                                    <li>Sumber tidak jelas</li>
+                                    <li>Menggunakan kalimat emosional</li>
+                                    <li>Meminta untuk disebarkan</li>
+                                    <li>Tidak ada tanggal/waktu</li>
+                                    <li>Tidak ada konfirmasi resmi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="fas fa-check-circle text-success me-2"></i>Ciri-ciri Berita Valid:</h6>
+                                <ul class="small mb-0">
+                                    <li>Sumber terpercaya</li>
+                                    <li>Fakta dapat diverifikasi</li>
+                                    <li>Bahasa formal dan jelas</li>
+                                    <li>Ada tanggal dan lokasi</li>
+                                    <li>Dikonfirmasi pihak berwenang</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'detection_app/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero-section text-center py-5 mb-5 bg-light rounded">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4 text-primary">
+            <i class="fas fa-shield-alt"></i> {{ SITE_NAME }}
+        </h1>
+        <p class="lead mb-4">
+            Sistem deteksi berita hoax menggunakan teknologi AI <strong>{{ MODEL_NAME }}</strong>. 
+            Cek keaslian berita Anda dalam hitungan detik!
+        </p>
+        
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-bolt fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Deteksi Cepat</h5>
+                        <p class="card-text">Analisis berita dalam waktu kurang dari 3 detik dengan akurasi tinggi.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-line fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title">Akurat</h5>
+                        <p class="card-text">Menggunakan model IndoBERT yang sudah dilatih dengan ribuan data berita.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-globe fa-3x text-info"></i>
+                        </div>
+                        <h5 class="card-title">Indonesia</h5>
+                        <p class="card-text">Khusus untuk berita dalam bahasa Indonesia dengan konteks lokal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <a href="{% url 'detect' %}" class="btn btn-primary btn-lg px-5 py-3 mb-3">
+                    <i class="fas fa-search me-2"></i> Cek Berita Sekarang
+                </a>
+                <p class="text-muted">
+                    <small>Sudah mendeteksi <strong>{{ stats.total_detections }}</strong> berita</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Statistics -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Statistik Sistem</h2>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h1 class="display-4">{{ stats.total_detections }}</h1>
+                            <p class="card-text">Total Deteksi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <h1 class="display-4">{{ stats.hoax_count }}</h1>
+                            <p class="card-text">Berita Hoax</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h1 class="display-4">{{ stats.valid_count }}</h1>
+                            <p class="card-text">Berita Valid</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h1 class="display-4">{{ stats.today_detections }}</h1>
+                            <p class="card-text">Hari Ini</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Detection Form -->
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-search me-2"></i> Cek Cepat</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'detect' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea name="news_text" class="form-control" 
+                                      rows="4" 
+                                      placeholder="Masukkan teks berita yang ingin Anda cek..."
+                                      required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-play-circle me-2"></i> Analisis Sekarang
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Fitur Unggulan</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-link text-primary me-2"></i>Deteksi dari URL
+                            </h5>
+                            <p class="card-text">
+                                Cukup masukkan URL berita, sistem akan otomatis mengambil dan menganalisis konten.
+                                Mendukung berbagai platform berita Indonesia.
+                            </p>
+                            <a href="{% url 'detect_url' %}" class="btn btn-outline-primary">Coba Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-file-upload text-success me-2"></i>Deteksi Batch
+                            </h5>
+                            <p class="card-text">
+                                Upload file CSV atau TXT berisi banyak berita sekaligus.
+                                Efisien untuk penelitian atau analisis massal.
+                            </p>
+                            <a href="{% url 'batch_detect' %}" class="btn btn-outline-success">Coba Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-history text-info me-2"></i>History Deteksi
+                            </h5>
+                            <p class="card-text">
+                                Simpan dan kelola riwayat deteksi Anda. Export hasil dalam format CSV atau JSON.
+                                Pantau perkembangan analisis Anda.
+                            </p>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'detection_history' %}" class="btn btn-outline-info">Lihat History</a>
+                            {% else %}
+                                <a href="{% url 'register' %}" class="btn btn-outline-info">Daftar untuk Akses</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-code text-warning me-2"></i>API Integration
+                            </h5>
+                            <p class="card-text">
+                                Integrasikan sistem deteksi hoax ke aplikasi Anda dengan API yang mudah digunakan.
+                                Lengkap dengan dokumentasi.
+                            </p>
+                            <a href="{% url 'api_docs' %}" class="btn btn-outline-warning">Lihat Dokumentasi</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
